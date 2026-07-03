@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Jellyfin.Server.Implementations.Security.Exceptions
 {
@@ -7,7 +8,9 @@ namespace Jellyfin.Server.Implementations.Security.Exceptions
 
     /// <summary>
     /// Base exception supporting aggregated validation data, modeled on the Xeption contract.
+    /// Name intentionally omits the "Exception" suffix to match The-Standard's Xeption convention.
     /// </summary>
+    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "The-Standard reserves the Xeption name for its base exception contract.")]
     public class Xeption : Exception
     {
         private readonly Dictionary<string, List<string>> errorData = new();
