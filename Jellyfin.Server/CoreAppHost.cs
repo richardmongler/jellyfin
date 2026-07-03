@@ -10,6 +10,8 @@ using Jellyfin.Drawing.Skia;
 using Jellyfin.LiveTv;
 using Jellyfin.Server.Implementations.Activity;
 using Jellyfin.Server.Implementations.Devices;
+using Jellyfin.Server.Implementations.Devices.Brokers;
+using Jellyfin.Server.Implementations.Devices.Services;
 using Jellyfin.Server.Implementations.Events;
 using Jellyfin.Server.Implementations.Extensions;
 using Jellyfin.Server.Implementations.Security;
@@ -100,6 +102,10 @@ namespace Jellyfin.Server
             // The-Standard: ApiKey Broker and Foundation Service
             serviceCollection.AddScoped<IApiKeyBroker, ApiKeyBroker>();
             serviceCollection.AddScoped<IApiKeyService, ApiKeyService>();
+
+            // The-Standard: Device Entity Broker and Foundation Service
+            serviceCollection.AddScoped<IDeviceBroker, DeviceBroker>();
+            serviceCollection.AddScoped<IDeviceService, DeviceService>();
 
             foreach (var type in GetExportTypes<ILyricProvider>())
             {
