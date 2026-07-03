@@ -10,6 +10,7 @@ using Jellyfin.Drawing.Skia;
 using Jellyfin.LiveTv;
 using Jellyfin.Server.Implementations.Activity;
 using Jellyfin.Server.Implementations.Activity.Brokers;
+using Jellyfin.Server.Implementations.Activity.Services;
 using Jellyfin.Server.Implementations.Devices;
 using Jellyfin.Server.Implementations.Devices.Brokers;
 using Jellyfin.Server.Implementations.Devices.Services;
@@ -114,6 +115,9 @@ namespace Jellyfin.Server
 
             // The-Standard: ActivityLog Entity Broker
             serviceCollection.AddScoped<IActivityLogBroker, ActivityLogBroker>();
+
+            // The-Standard: ActivityLog Foundation Service
+            serviceCollection.AddScoped<IActivityLogService, ActivityLogService>();
 
             foreach (var type in GetExportTypes<ILyricProvider>())
             {
