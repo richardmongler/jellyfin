@@ -107,6 +107,10 @@ namespace Jellyfin.Server
             serviceCollection.AddScoped<IDeviceBroker, DeviceBroker>();
             serviceCollection.AddScoped<IDeviceService, DeviceService>();
 
+            // The-Standard: DeviceOptions Entity Broker and Foundation Service
+            serviceCollection.AddScoped<IDeviceOptionsBroker, DeviceOptionsBroker>();
+            serviceCollection.AddScoped<IDeviceOptionsService, DeviceOptionsService>();
+
             foreach (var type in GetExportTypes<ILyricProvider>())
             {
                 serviceCollection.AddSingleton(typeof(ILyricProvider), type);
