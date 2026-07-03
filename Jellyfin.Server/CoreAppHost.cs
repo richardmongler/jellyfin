@@ -135,6 +135,10 @@ namespace Jellyfin.Server
             serviceCollection.AddScoped<IDisplayPreferencesBroker, DisplayPreferencesBroker>();
             serviceCollection.AddScoped<IDisplayPreferencesService, DisplayPreferencesService>();
 
+            // The-Standard: ItemDisplayPreferences Entity Broker and Foundation Service (Std 1.2.8 one resource)
+            serviceCollection.AddScoped<IItemDisplayPreferencesBroker, ItemDisplayPreferencesBroker>();
+            serviceCollection.AddScoped<IItemDisplayPreferencesService, ItemDisplayPreferencesService>();
+
             foreach (var type in GetExportTypes<ILyricProvider>())
             {
                 serviceCollection.AddSingleton(typeof(ILyricProvider), type);
