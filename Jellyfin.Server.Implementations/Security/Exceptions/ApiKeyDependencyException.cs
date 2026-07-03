@@ -1,3 +1,5 @@
+using Jellyfin.Server.Implementations.Standard.Exceptions;
+
 namespace Jellyfin.Server.Implementations.Security.Exceptions
 {
     /// <summary>

@@ -1,4 +1,4 @@
-using Jellyfin.Server.Implementations.Security.Exceptions;
+using Jellyfin.Server.Implementations.Standard.Exceptions;
 
 namespace Jellyfin.Server.Implementations.Devices.Exceptions
 {

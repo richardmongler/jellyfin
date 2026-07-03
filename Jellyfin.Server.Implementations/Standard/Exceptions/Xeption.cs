@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Jellyfin.Server.Implementations.Security.Exceptions
+namespace Jellyfin.Server.Implementations.Standard.Exceptions
 {
     // ponytail: Xeption package won't resolve on net10.0, inline minimal equivalent
 
     /// <summary>
     /// Base exception supporting aggregated validation data, modeled on the Xeption contract.
     /// Name intentionally omits the "Exception" suffix to match The-Standard's Xeption convention.
+    /// Lives in a neutral Standard namespace so no single domain (e.g. Security) is privileged by
+    /// hosting the shared exception contract (The-Standard: Every Service for Itself).
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "The-Standard reserves the Xeption name for its base exception contract.")]
     public class Xeption : Exception
