@@ -17,6 +17,8 @@ using Jellyfin.Server.Implementations.Devices.Brokers;
 using Jellyfin.Server.Implementations.Devices.Services;
 using Jellyfin.Server.Implementations.Events;
 using Jellyfin.Server.Implementations.Extensions;
+using Jellyfin.Server.Implementations.Preferences.Brokers;
+using Jellyfin.Server.Implementations.Preferences.Services;
 using Jellyfin.Server.Implementations.Security;
 using Jellyfin.Server.Implementations.Security.Brokers;
 using Jellyfin.Server.Implementations.Security.Services;
@@ -128,6 +130,10 @@ namespace Jellyfin.Server
             // The-Standard: User Entity Broker and Foundation Service
             serviceCollection.AddScoped<IUserBroker, UserBroker>();
             serviceCollection.AddScoped<IUserService, UserService>();
+
+            // The-Standard: DisplayPreferences Entity Broker and Foundation Service (Std 1.2.8 one resource)
+            serviceCollection.AddScoped<IDisplayPreferencesBroker, DisplayPreferencesBroker>();
+            serviceCollection.AddScoped<IDisplayPreferencesService, DisplayPreferencesService>();
 
             foreach (var type in GetExportTypes<ILyricProvider>())
             {
