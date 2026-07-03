@@ -8,13 +8,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jellyfin.Server.Implementations.Security.Brokers
 {
+    /// <summary>
+    /// Entity broker integrating the API key resource with EF Core. Owns no flow control.
+    /// </summary>
     public partial class ApiKeyBroker : IApiKeyBroker
     {
         private readonly IDbContextFactory<JellyfinDbContext> dbContextFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiKeyBroker"/> class.
+        /// </summary>
+        /// <param name="dbContextFactory">The EF Core context factory.</param>
         public ApiKeyBroker(IDbContextFactory<JellyfinDbContext> dbContextFactory) =>
             this.dbContextFactory = dbContextFactory;
 
+        /// <inheritdoc/>
         public async ValueTask<ApiKey> InsertApiKeyAsync(ApiKey apiKey)
         {
             using var dbContext = await this.dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
@@ -25,6 +33,7 @@ namespace Jellyfin.Server.Implementations.Security.Brokers
             return apiKey;
         }
 
+        /// <inheritdoc/>
         public async ValueTask<IReadOnlyList<ApiKey>> SelectAllApiKeysAsync()
         {
             using var dbContext = await this.dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
@@ -34,7 +43,8 @@ namespace Jellyfin.Server.Implementations.Security.Brokers
                 .ConfigureAwait(false);
         }
 
-        public async ValueTask<ApiKey> SelectApiKeyByIdAsync(int apiKeyId)
+        /// <inheritdoc/>
+        public async ValueTask<ApiKey?> SelectApiKeyByIdAsync(int apiKeyId)
         {
             using var dbContext = await this.dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
 
@@ -43,7 +53,8 @@ namespace Jellyfin.Server.Implementations.Security.Brokers
                 .ConfigureAwait(false);
         }
 
-        public async ValueTask<ApiKey> SelectApiKeyByAccessTokenAsync(string accessToken)
+        /// <inheritdoc/>
+        public async ValueTask<ApiKey?> SelectApiKeyByAccessTokenAsync(string accessToken)
         {
             using var dbContext = await this.dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);
 
@@ -52,6 +63,7 @@ namespace Jellyfin.Server.Implementations.Security.Brokers
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc/>
         public async ValueTask<ApiKey> DeleteApiKeyAsync(ApiKey apiKey)
         {
             using var dbContext = await this.dbContextFactory.CreateDbContextAsync().ConfigureAwait(false);

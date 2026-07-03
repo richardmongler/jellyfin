@@ -1,11 +1,16 @@
-using Xeption;
-
 namespace Jellyfin.Server.Implementations.Security.Exceptions
 {
+    /// <summary>
+    /// Exception thrown when a requested API key cannot be located.
+    /// </summary>
     public class ApiKeyNotFoundException : Xeption
     {
-        public ApiKeyNotFoundException(string accessToken)
-            : base(message: $"API key not found with access token: {accessToken}.")
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiKeyNotFoundException"/> class.
+        /// </summary>
+        /// <param name="identifier">The identifier (id or access token) that was not found.</param>
+        public ApiKeyNotFoundException(string identifier)
+            : base(message: $"API key not found for identifier: {identifier}.")
         {
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using Jellyfin.Database.Implementations.Entities.Security;
+using Jellyfin.Server.Implementations.Security.Exceptions;
 
 namespace Jellyfin.Server.Implementations.Security.Services
 {
@@ -40,6 +41,15 @@ namespace Jellyfin.Server.Implementations.Security.Services
             if (string.IsNullOrWhiteSpace(accessToken))
             {
                 throw new InvalidApiKeyException();
+            }
+        }
+
+        // ponytail: external/dependency existence validation per The-Standard (4.1.3.1.4/1.5)
+        private static void ValidateApiKeyExists(ApiKey? apiKey, string identifier)
+        {
+            if (apiKey is null)
+            {
+                throw new ApiKeyNotFoundException(identifier);
             }
         }
 

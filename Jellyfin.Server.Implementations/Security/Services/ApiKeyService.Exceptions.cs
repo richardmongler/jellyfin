@@ -8,19 +8,20 @@ namespace Jellyfin.Server.Implementations.Security.Services
     {
         private delegate ValueTask<T> ReturningValueTaskFunction<T>();
 
-        private static T TryCatch<T>(ReturningValueTaskFunction<T> returningValueTaskFunction)
+        // ponytail: The-Standard TryCatch cancels exception noise at the Foundation layer
+        private static async ValueTask<T> TryCatch<T>(ReturningValueTaskFunction<T> returningValueTaskFunction)
         {
             try
             {
-                return returningValueTaskFunction().AsTask().GetAwaiter().GetResult();
+                return await returningValueTaskFunction().ConfigureAwait(false);
             }
-            catch (InvalidApiKeyException invalidApiKeyException)
+            catch (InvalidApiKeyException)
             {
-                throw invalidApiKeyException;
+                throw;
             }
-            catch (ApiKeyNotFoundException apiKeyNotFoundException)
+            catch (ApiKeyNotFoundException)
             {
-                throw apiKeyNotFoundException;
+                throw;
             }
             catch (Exception exception)
             {
