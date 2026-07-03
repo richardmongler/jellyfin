@@ -10,6 +10,7 @@ using Jellyfin.Drawing.Skia;
 using Jellyfin.LiveTv;
 using Jellyfin.Server.Implementations.Activity;
 using Jellyfin.Server.Implementations.Activity.Brokers;
+using Jellyfin.Server.Implementations.Activity.Orchestration;
 using Jellyfin.Server.Implementations.Activity.Services;
 using Jellyfin.Server.Implementations.Devices;
 using Jellyfin.Server.Implementations.Devices.Brokers;
@@ -120,6 +121,9 @@ namespace Jellyfin.Server
 
             // The-Standard: ActivityLog Foundation Service
             serviceCollection.AddScoped<IActivityLogService, ActivityLogService>();
+
+            // The-Standard: ActivityLog Orchestration Service (Std 2.3, Two-Three Florance over ActivityLog + User Foundations)
+            serviceCollection.AddScoped<IActivityLogOrchestrationService, ActivityLogOrchestrationService>();
 
             // The-Standard: User Entity Broker and Foundation Service
             serviceCollection.AddScoped<IUserBroker, UserBroker>();
