@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Jellyfin.Data.Enums;
 using Jellyfin.Data.Queries;
 using Jellyfin.Database.Implementations.Enums;
+using Jellyfin.Server.Implementations.Activity.Orchestration;
 using MediaBrowser.Common.Api;
 using MediaBrowser.Model.Activity;
 using MediaBrowser.Model.Querying;
@@ -22,15 +23,16 @@ namespace Jellyfin.Api.Controllers;
 [Tags("System")]
 public class ActivityLogController : BaseJellyfinApiController
 {
-    private readonly IActivityManager _activityManager;
+    // The-Standard 3.1.1.2.2: single dependency on the ActivityLog Orchestration service.
+    private readonly IActivityLogOrchestrationService _activityLogOrchestrationService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ActivityLogController"/> class.
     /// </summary>
-    /// <param name="activityManager">Instance of <see cref="IActivityManager"/> interface.</param>
-    public ActivityLogController(IActivityManager activityManager)
+    /// <param name="activityLogOrchestrationService">The ActivityLog orchestration service.</param>
+    public ActivityLogController(IActivityLogOrchestrationService activityLogOrchestrationService)
     {
-        _activityManager = activityManager;
+        _activityLogOrchestrationService = activityLogOrchestrationService;
     }
 
     /// <summary>
@@ -87,7 +89,9 @@ public class ActivityLogController : BaseJellyfinApiController
             OrderBy = GetOrderBy(sortBy ?? [], sortOrder ?? []),
         };
 
-        return await _activityManager.GetPagedResultAsync(query).ConfigureAwait(false);
+        return await _activityLogOrchestrationService
+            .RetrieveActivityLogEntriesAsync(query)
+            .ConfigureAwait(false);
     }
 
     private static (ActivityLogSortBy SortBy, SortOrder SortOrder)[] GetOrderBy(
