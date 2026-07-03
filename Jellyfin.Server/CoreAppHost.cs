@@ -21,6 +21,8 @@ using Jellyfin.Server.Implementations.Security.Brokers;
 using Jellyfin.Server.Implementations.Security.Services;
 using Jellyfin.Server.Implementations.Trickplay;
 using Jellyfin.Server.Implementations.Users;
+using Jellyfin.Server.Implementations.Users.Brokers;
+using Jellyfin.Server.Implementations.Users.Services;
 using MediaBrowser.Controller;
 using MediaBrowser.Controller.Authentication;
 using MediaBrowser.Controller.BaseItemManager;
@@ -118,6 +120,10 @@ namespace Jellyfin.Server
 
             // The-Standard: ActivityLog Foundation Service
             serviceCollection.AddScoped<IActivityLogService, ActivityLogService>();
+
+            // The-Standard: User Entity Broker and Foundation Service
+            serviceCollection.AddScoped<IUserBroker, UserBroker>();
+            serviceCollection.AddScoped<IUserService, UserService>();
 
             foreach (var type in GetExportTypes<ILyricProvider>())
             {
