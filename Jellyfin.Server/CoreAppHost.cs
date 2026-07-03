@@ -26,7 +26,6 @@ using MediaBrowser.Controller.Events;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.Lyrics;
 using MediaBrowser.Controller.Net;
-using MediaBrowser.Controller.Security;
 using MediaBrowser.Controller.Trickplay;
 using MediaBrowser.Model.Activity;
 using MediaBrowser.Providers.Lyric;
@@ -97,8 +96,6 @@ namespace Jellyfin.Server
             serviceCollection.AddSingleton<IWebSocketListener, SessionInfoWebSocketListener>();
 
             serviceCollection.AddSingleton<IAuthorizationContext, AuthorizationContext>();
-
-            serviceCollection.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
             // The-Standard: ApiKey Broker and Foundation Service
             serviceCollection.AddScoped<IApiKeyBroker, ApiKeyBroker>();

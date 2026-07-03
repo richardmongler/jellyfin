@@ -1,6 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Jellyfin.Api.Constants;
+using Jellyfin.Database.Implementations.Entities.Security;
+using Jellyfin.Server.Implementations.Security.Services;
 using MediaBrowser.Common.Api;
 using MediaBrowser.Controller.Security;
 using MediaBrowser.Model.Querying;
@@ -17,15 +20,15 @@ namespace Jellyfin.Api.Controllers;
 [Tags("Authentication")]
 public class ApiKeyController : BaseJellyfinApiController
 {
-    private readonly IAuthenticationManager _authenticationManager;
+    private readonly IApiKeyService _apiKeyService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ApiKeyController"/> class.
     /// </summary>
-    /// <param name="authenticationManager">Instance of <see cref="IAuthenticationManager"/> interface.</param>
-    public ApiKeyController(IAuthenticationManager authenticationManager)
+    /// <param name="apiKeyService">Instance of <see cref="IApiKeyService"/> interface.</param>
+    public ApiKeyController(IApiKeyService apiKeyService)
     {
-        _authenticationManager = authenticationManager;
+        _apiKeyService = apiKeyService;
     }
 
     /// <summary>
@@ -38,7 +41,17 @@ public class ApiKeyController : BaseJellyfinApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<QueryResult<AuthenticationInfo>>> GetKeys()
     {
-        var keys = await _authenticationManager.GetApiKeys().ConfigureAwait(false);
+        var apiKeys = await _apiKeyService.RetrieveAllApiKeysAsync().ConfigureAwait(false);
+
+        var keys = apiKeys.Select(key => new AuthenticationInfo
+        {
+            AppName = key.Name,
+            AccessToken = key.AccessToken,
+            DateCreated = key.DateCreated,
+            DeviceId = string.Empty,
+            DeviceName = string.Empty,
+            AppVersion = string.Empty
+        }).ToList();
 
         return new QueryResult<AuthenticationInfo>(keys);
     }
@@ -54,7 +67,8 @@ public class ApiKeyController : BaseJellyfinApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> CreateKey([FromQuery, Required] string app)
     {
-        await _authenticationManager.CreateApiKey(app).ConfigureAwait(false);
+        var apiKey = new ApiKey(name: app);
+        await _apiKeyService.AddApiKeyAsync(apiKey).ConfigureAwait(false);
 
         return NoContent();
     }
@@ -70,7 +84,8 @@ public class ApiKeyController : BaseJellyfinApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> RevokeKey([FromRoute, Required] string key)
     {
-        await _authenticationManager.DeleteApiKey(key).ConfigureAwait(false);
+        var apiKey = await _apiKeyService.RetrieveApiKeyByAccessTokenAsync(key).ConfigureAwait(false);
+        await _apiKeyService.RemoveApiKeyAsync(apiKey).ConfigureAwait(false);
 
         return NoContent();
     }
